@@ -15,7 +15,7 @@ type UserRepository struct {
 	BaseRepository[models.User]
 }
 
-func NewUserRepository(db *gorm.DB) IUserRepository {
+func NewUserRepository(db *gorm.DB) UserRepository {
 	return UserRepository{
 		BaseRepository[models.User]{db: db},
 	}
