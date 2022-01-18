@@ -2,13 +2,13 @@ package handlers
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"gorm.io/gorm"
+	"github.com/uptrace/bun"
 
 	"github.com/hhuseyinpay/go-generic-repository-pattern/models"
 	"github.com/hhuseyinpay/go-generic-repository-pattern/repository"
 )
 
-func NewUserHandler(db *gorm.DB) UserHandler {
+func NewUserHandler(db *bun.DB) UserHandler {
 	repo := repository.NewUserRepository(db)
 	uh := UserHandler{
 		BaseHandler: BaseHandler[models.User]{
@@ -28,7 +28,7 @@ type UserHandler struct {
 func (h UserHandler) GetByName(c *fiber.Ctx) error {
 	name := c.Params("name")
 
-	users, err := h.repository.GetByName(name)
+	users, err := h.repository.GetByName(c.Context(), name)
 	if err != nil {
 		return errorResult(c, err)
 	}

@@ -1,24 +1,20 @@
 package database
 
 import (
-	"gorm.io/driver/sqlite"
-	"gorm.io/gorm"
+	"database/sql"
 
-	"github.com/hhuseyinpay/go-generic-repository-pattern/models"
+	"github.com/uptrace/bun"
+	"github.com/uptrace/bun/dialect/sqlitedialect"
+	"github.com/uptrace/bun/driver/sqliteshim"
+	"github.com/uptrace/bun/extra/bundebug"
 )
 
-var DB *gorm.DB
-
-func init() {
-	var err error
-	DB, err = gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
+func New() (*bun.DB, error) {
+	sqldb, err := sql.Open(sqliteshim.ShimName, "file:test.db?cache=shared")
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
-
-	// Migrate the schema
-	err = DB.AutoMigrate(&models.User{})
-	if err != nil {
-		panic(err)
-	}
+	db := bun.NewDB(sqldb, sqlitedialect.New())
+	db.AddQueryHook(bundebug.NewQueryHook(bundebug.WithVerbose(true)))
+	return db, nil
 }

@@ -1,44 +1,51 @@
 package repository
 
 import (
-	"gorm.io/gorm"
+	"context"
+
+	"github.com/uptrace/bun"
 )
 
 type IBaseRepository[T any] interface {
-	Create(t T) (T, error)
-	GetByID(id int64) (T, error)
-	GetAll() ([]T, error)
-	Update(t T) error
-	Delete(t T) error
+	Create(ctx context.Context, t T) (T, error)
+	GetByID(ctx context.Context, id int64) (T, error)
+	GetAll(ctx context.Context) ([]T, error)
+	Update(ctx context.Context, t T) error
+	Delete(ctx context.Context, id int64) error
 }
 
 type BaseRepository[T any] struct {
-	db *gorm.DB
+	db *bun.DB
 }
 
-func (r BaseRepository[T]) Create(t T) (T, error) {
-	err := r.db.Create(&t).Error
+func (r BaseRepository[T]) Create(ctx context.Context, t T) (T, error) {
+	_, err := r.db.NewInsert().Model(&t).Exec(ctx)
 	return t, err
 }
 
-func (r BaseRepository[T]) GetByID(id int64) (T, error) {
+func (r BaseRepository[T]) GetByID(ctx context.Context, id int64) (T, error) {
 	var t T
-	err := r.db.Where("id = ?", id).First(&t).Error
+	err := r.db.NewSelect().Model(&t).Where("id = ?", id).Scan(ctx)
 	return t, err
 }
 
-func (r BaseRepository[T]) GetAll() ([]T, error) {
+func (r BaseRepository[T]) GetAll(ctx context.Context) ([]T, error) {
 	var t []T
-	err := r.db.Find(&t).Error
+	err := r.db.NewSelect().Model(&t).Where("").Scan(ctx)
 	return t, err
 }
 
-func (r BaseRepository[T]) Update(t T) error {
-	err := r.db.Save(&t).Error
+func (r BaseRepository[T]) Update(ctx context.Context, t T) error {
+	_, err := r.db.NewUpdate().
+		Model(&t).
+		OmitZero().
+		WherePK().
+		Exec(ctx)
 	return err
 }
 
-func (r BaseRepository[T]) Delete(t T) error {
-	err := r.db.Delete(&t).Error
+func (r BaseRepository[T]) Delete(ctx context.Context, id int64) error {
+	var t T
+	_, err := r.db.NewDelete().Model(&t).Where("id = ?", id).Exec(ctx)
 	return err
 }

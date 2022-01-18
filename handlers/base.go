@@ -11,7 +11,7 @@ type BaseHandler[T any] struct {
 }
 
 func (h BaseHandler[T]) GetAll(ctx *fiber.Ctx) error {
-	m, err := h.baseRepository.GetAll()
+	m, err := h.baseRepository.GetAll(ctx.Context())
 	if err != nil {
 		return errorResult(ctx, err)
 	}
@@ -25,7 +25,7 @@ func (h BaseHandler[T]) PostCreate(ctx *fiber.Ctx) error {
 	if err != nil {
 		return errorResult(ctx, err)
 	}
-	m, err = h.baseRepository.Create(m)
+	m, err = h.baseRepository.Create(ctx.Context(), m)
 	if err != nil {
 		return errorResult(ctx, err)
 	}
