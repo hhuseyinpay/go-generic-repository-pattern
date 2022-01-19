@@ -1,0 +1,54 @@
+basePath: /api/
+definitions:
+  models.User:
+    properties:
+      created_at:
+        type: string
+      deleted_at:
+        type: string
+      id:
+        description: id of this item in the database
+        type: integer
+      name:
+        type: string
+      surname:
+        type: string
+      updated_at:
+        type: string
+    type: object
+host: localhost:3000
+info:
+  contact:
+    email: hhuseyinpay@gmail.com
+  description: This is a sample project for generic repostitory pattern
+  termsOfService: http://swagger.io/terms/
+  title: Generic Repository Pattern
+  version: "1.0"
+paths:
+  /users/{name}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Name of User
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+        "400":
+          description: ""
+        "404":
+          description: ""
+        "500":
+          description: ""
+      summary: Get user by name
+      tags:
+      - users
+swagger: "2.0"
