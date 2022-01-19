@@ -7,9 +7,17 @@ import (
 	"github.com/gofiber/fiber/v2"
 
 	"github.com/hhuseyinpay/go-generic-repository-pattern/database"
+	_ "github.com/hhuseyinpay/go-generic-repository-pattern/docs"
 	"github.com/hhuseyinpay/go-generic-repository-pattern/router"
 )
 
+// @title Generic Repository Pattern
+// @version 1.0
+// @description This is a sample project for generic repostitory pattern
+// @termsOfService http://swagger.io/terms/
+// @contact.email hhuseyinpay@gmail.com
+// @host localhost:3000
+// @BasePath /api/
 func main() {
 	log.Println("bismillah")
 	db, err := database.New()
@@ -29,5 +37,5 @@ func main() {
 		log.Fatalf("%v", err)
 	}
 
-	log.Println("bye bye")
+	log.Println("hoşcagal")
 }

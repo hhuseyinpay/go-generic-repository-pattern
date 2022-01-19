@@ -39,7 +39,15 @@ func errorResult(c *fiber.Ctx, err error) error {
 		"error":   err.Error(),
 	})
 }
-func successResult[T any](c *fiber.Ctx, t T) error {
+
+func notFoundResult(c *fiber.Ctx) error {
+	return c.Status(404).JSON(fiber.Map{
+		"success": false,
+		"error":   "not found",
+	})
+}
+
+func successResult[T any](c *fiber.Ctx, t ...T) error {
 	return c.JSON(fiber.Map{
 		"success": true,
 		"data":    t,

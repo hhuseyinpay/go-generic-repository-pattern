@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"database/sql"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/uptrace/bun"
 
@@ -25,13 +27,27 @@ type UserHandler struct {
 	repository repository.IUserRepository
 }
 
+// GetByName godoc
+// @Summary      Get user by name
+// @Tags         users
+// @Accept       json
+// @Produce      json
+// @Param        name  path      string  true  "Name of User"
+// @Success      200   {object}  models.User
+// @Failure      400
+// @Failure      404
+// @Failure      500
+// @Router       /users/{name} [get]
 func (h UserHandler) GetByName(c *fiber.Ctx) error {
 	name := c.Params("name")
 
-	users, err := h.repository.GetByName(c.Context(), name)
+	user, err := h.repository.GetByName(c.Context(), name)
+	if err == sql.ErrNoRows {
+		return notFoundResult(c)
+	}
 	if err != nil {
 		return errorResult(c, err)
 	}
 
-	return successResult(c, users)
+	return successResult(c, user)
 }
