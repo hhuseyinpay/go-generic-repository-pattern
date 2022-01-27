@@ -25,6 +25,6 @@ func NewUserRepository(db *bun.DB) UserRepository {
 
 func (r UserRepository) GetByName(ctx context.Context, name string) (models.User, error) {
 	var m models.User
-	err := r.db.NewSelect().Model(&m).Where("? ->> '?' ILIKE '%?%'", bun.Ident("detail"), bun.Safe("phone"), bun.Safe(name)).Scan(ctx)
+	err := r.db.NewSelect().Model(&m).Where("name = ?", name).Scan(ctx)
 	return m, err
 }
