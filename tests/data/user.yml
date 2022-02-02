@@ -1,0 +1,26 @@
+- model: User
+  rows:
+    - _id: 1
+      created_at: '{{ now }}'
+      updated_at: '{{ now }}'
+      name: hasan
+      surname: Pay
+      detail:
+          phone: 123
+          type: 1
+    - _id: 2
+      created_at: '{{ now }}'
+      updated_at: '{{ now }}'
+      name: hüseyin
+      surname: pay
+      detail:
+          phone: 1234
+          type: 2
+    - _id: 3
+      created_at: '{{ now }}'
+      updated_at: '{{ now }}'
+      name: Hasan Hüseyin
+      surname: Pay
+      detail:
+          phone: 12345
+          type: 3

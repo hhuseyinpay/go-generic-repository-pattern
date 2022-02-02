@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"log"
 
 	"github.com/gofiber/fiber/v2"
@@ -20,15 +19,7 @@ import (
 // @BasePath /api/
 func main() {
 	log.Println("bismillah")
-	db, err := database.New()
-	if err != nil {
-		panic(err)
-	}
-
-	err = database.Migrate(context.Background(), db)
-	if err != nil {
-		panic(err)
-	}
+	db := database.DB()
 
 	app := fiber.New()
 	router.Setup(app, db)

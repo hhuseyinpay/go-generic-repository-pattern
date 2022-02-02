@@ -16,7 +16,7 @@ func init() {
 		return db.RunInTx(ctx, nil, func(ctx context.Context, tx bun.Tx) error {
 			if _, err := db.NewAddColumn().
 				Model(&migrations.User{}).
-				ColumnExpr("phone JSONB").
+				ColumnExpr("detail JSONB").
 				Exec(ctx); err != nil {
 				return err
 			}
@@ -27,7 +27,7 @@ func init() {
 	down := func(ctx context.Context, db *bun.DB) error {
 		return db.RunInTx(ctx, nil, func(ctx context.Context, tx bun.Tx) error {
 			for _, i := range m {
-				if _, err := db.NewDropColumn().Model(i).ColumnExpr("phone").Exec(ctx); err != nil {
+				if _, err := db.NewDropColumn().Model(i).ColumnExpr("detail").Exec(ctx); err != nil {
 					return err
 				}
 			}
